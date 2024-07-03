@@ -46,7 +46,7 @@ const plugins = [
     resolve: "@medusajs/admin",
     /** @type {import('@medusajs/admin').PluginOptions} */
     options: {
-      autoRebuild: false,
+      autoRebuild: process.env.NODE_ENV === "development",
       serve: process.env.NODE_ENV === "development",
       develop: {
         open: process.env.OPEN_BROWSER !== "false",
@@ -83,7 +83,7 @@ const projectConfig = {
   // redis_url: REDIS_URL
   database_extra: {
     ssl: {
-      rejectUnauthorized: true
+      rejectUnauthorized: false
     }
   }
 };
