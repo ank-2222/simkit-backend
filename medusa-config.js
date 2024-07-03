@@ -47,7 +47,7 @@ const plugins = [
     /** @type {import('@medusajs/admin').PluginOptions} */
     options: {
       autoRebuild: process.env.NODE_ENV === "development",
-      serve: process.env.NODE_ENV === "development",
+      serve: true,
       develop: {
         open: process.env.OPEN_BROWSER !== "false",
       },
@@ -56,18 +56,18 @@ const plugins = [
 ];
 
 const modules = {
-  eventBus: {
-    resolve: "@medusajs/event-bus-redis",
-    options: {
-      redisUrl: REDIS_URL
-    }
-  },
-  cacheService: {
-    resolve: "@medusajs/cache-redis",
-    options: {
-      redisUrl: REDIS_URL
-    }
-  },
+  // eventBus: {
+  //   resolve: "@medusajs/event-bus-redis",
+  //   options: {
+  //     redisUrl: REDIS_URL
+  //   }
+  // },
+  // cacheService: {
+  //   resolve: "@medusajs/cache-redis",
+  //   options: {
+  //     redisUrl: REDIS_URL
+  //   }
+  // },
 };
 
 /** @type {import('@medusajs/medusa').ConfigModule["projectConfig"]} */
