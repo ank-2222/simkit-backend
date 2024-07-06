@@ -12,6 +12,7 @@ class CustomerGroupAssignmentSubscriber {
     this.customerGroupService = properties.customerGroupService;
     properties.eventBusService.subscribe("customer.created" , this.handleGroupAssignment);
     properties.eventBusService.subscribe("customer.updated", this.handleGroupAssignment);
+    properties.eventBusService.subscribe("cart.customer_updated", this.handleGroupAssignment);
   }
 
   handleGroupAssignment = async (customer) => {
