@@ -22,7 +22,7 @@ try {
 } catch (e) {}
 
 // CORS when consuming Medusa from admin
-const ADMIN_CORS ="https://simkit-backend.vercel.app,http://localhost:7000,http://localhost:7001";
+const ADMIN_CORS ="https://simkit-backend.vercel.app, http://localhost:7000, http://localhost:7001";
 
 // CORS to avoid issues when consuming Medusa from a client
 const STORE_CORS = "http://localhost:5173,https://simkit-frontend.onrender.com";
@@ -79,7 +79,7 @@ const projectConfig = {
   database_url: DATABASE_URL,
   admin_cors: ADMIN_CORS,
   // Uncomment the following lines to enable REDIS
-  // redis_url: REDIS_URL
+  redis_url: REDIS_URL,
   database_extra: {
     ssl: {
       rejectUnauthorized: false
