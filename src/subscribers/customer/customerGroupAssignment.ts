@@ -17,7 +17,7 @@ class CustomerGroupAssignmentSubscriber {
 
   handleGroupAssignment = async (customer) => {
     // List of country codes eligible for free shipping
-    const eligibleCountryCodes = ["CA", "PR", "US"];
+    const eligibleCountryCodes = ["ca", "pr", "us"];
     
     // Check if the customer's country code is eligible
     if (!eligibleCountryCodes.includes(customer.shipping_address.country_code)) {

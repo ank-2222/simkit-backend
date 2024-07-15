@@ -22,7 +22,7 @@ try {
 } catch (e) {}
 
 // CORS when consuming Medusa from admin
-const ADMIN_CORS =   "https://simkit-backend.vercel.app, http://localhost:7000, http://localhost:7001";
+const ADMIN_CORS =   "https://simkit-backend.vercel.app,http://localhost:7000,http://localhost:7001";
 
 // CORS to avoid issues when consuming Medusa from a client
 const STORE_CORS = "http://localhost:5173,https://simkit-frontend.onrender.com";
@@ -57,9 +57,26 @@ const plugins = [
     options: {
       api_key: process.env.STRIPE_API_KEY,
       payment_description: "Simkit Payment",
+      capture: true,
       // webhook_secret: process.env.STRIPE_WEBHOOK_SECRET,
     },
   },
+  {
+    resolve: `medusa-fulfillment-shiprocket`,
+    options: {
+      channel_id: process.env.SHIPROCKET_CHANNEL_ID, //(required)
+      email: process.env.SHIPROCKET_EMAIL, //(required)
+      password: process.env.SHIPROCKET_PASSWORD, //(required)
+      token: "", //(required. leave empty)
+      pricing: 'calculated', //"flat_rate" or "calculated" (required)
+      length_unit: 'cm', //"mm", "cm" or "inches" (required)
+      multiple_items: 'split_shipment', //"single_shipment" or "split_shipment"(default) (required)
+      inventory_sync: false, //true or false(default) (required)
+      forward_action: 'create_order', //'create_fulfillment' or 'create_order'(default) (required)
+      return_action: 'create_order', //'create_fulfillment' or 'create_order'(default) (required)
+    }
+  },
+  
 ];
 
 const modules = {
@@ -75,6 +92,7 @@ const modules = {
   //     redisUrl: REDIS_URL
   //   }
   // },
+  
 };
 
 /** @type {import('@medusajs/medusa').ConfigModule["projectConfig"]} */
