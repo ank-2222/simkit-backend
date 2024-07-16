@@ -1,4 +1,5 @@
 const dotenv = require("dotenv");
+const path = require("path");
 
 let ENV_FILE_NAME = "";
 switch (process.env.NODE_ENV) {
@@ -45,6 +46,7 @@ const plugins = [
     resolve: "@medusajs/admin",
     /** @type {import('@medusajs/admin').PluginOptions} */
     options: {
+      // path: "/admin",
       autoRebuild: process.env.NODE_ENV === "development",
       serve: process.env.NODE_ENV === "development",
       develop: {
@@ -80,8 +82,8 @@ const plugins = [
     resolve: `medusa-storage-supabase`,
     options: {
       referenceID: process.env.STORAGE_BUCKET_REF,
-      serviceKey: process.env.STORAGE_SERVICE_KEY,
-      bucketName: process.env.BUCKET_NAME,
+      serviceKey: process.env.SUPABASE_SERVICE_KEY,
+      bucketName: process.env.SUPABASE_BUCKET_NAME,
     },
   },
 ];
@@ -112,7 +114,7 @@ const projectConfig = {
   database_url: DATABASE_URL,
   admin_cors: ADMIN_CORS,
   // Uncomment the following lines to enable REDIS
-  redis_url: REDIS_URL,
+  // redis_url: REDIS_URL,
   database_extra: {
     ssl: {
       rejectUnauthorized: false
