@@ -21,7 +21,6 @@ class PodcastService extends BaseService {
       let imageUrl = null;
       let audioUrl = null;
       // console.log(data);
-       console.log("data",data.image);
       if (data.image) {
         imageUrl = await uploadFileToSupabase(data.image, `podcast/images/${data.image.newFilename}`);
         if (!imageUrl) {
@@ -37,7 +36,10 @@ class PodcastService extends BaseService {
       }
   
       const podcastData = {
-        ...data,
+        id: data.id,
+        title: data.title[0],
+        subtitle: data.subtitle[0],
+        description: data.description[0],
         image_url: imageUrl,
         audio_file: audioUrl,
       };

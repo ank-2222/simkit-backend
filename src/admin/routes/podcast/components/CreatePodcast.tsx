@@ -43,9 +43,7 @@ export function CreatePodcast({ handleAddPodcast }: CreatePodcastProps) {
     formData.append("audio", podcastData.audio as File);
     formData.append("image", podcastData.image as File);
     formData.append("description", podcastData.description);
-    for (let [key, value] of formData.entries()) {
-      console.log(key, value);
-    }
+   
     handleAddPodcast(formData);
   };
 

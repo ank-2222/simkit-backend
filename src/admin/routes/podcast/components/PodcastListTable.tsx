@@ -10,7 +10,7 @@ function PodcastListTable({podcasts}:podcastProps) {
 
    const data = useMemo(() => podcasts, [podcasts]);
    const [currentPage, setCurrentPage] = useState(0)
-   const pageSize = 3
+   const pageSize = 10
    const pageCount = Math.ceil(data.length / pageSize)
    const canNextPage = useMemo(
      () => currentPage < pageCount - 1,
@@ -57,7 +57,7 @@ function PodcastListTable({podcasts}:podcastProps) {
                 key={podcast.id}
                 className="[&_td:last-child]:w-[1%] [&_td:last-child]:whitespace-nowrap"
               >
-                <Table.Cell>{index}</Table.Cell>
+                <Table.Cell>{index+1}</Table.Cell>
                 <Table.Cell>{podcast.title}</Table.Cell>
                 <Table.Cell>{podcast.subtitle}</Table.Cell>
                 <Table.Cell>{new Date(podcast.created_at).toLocaleString()}</Table.Cell>
