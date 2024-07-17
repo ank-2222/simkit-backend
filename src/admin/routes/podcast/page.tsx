@@ -9,7 +9,7 @@ import {
 } from "../../utils/podcastService";
 import { Podcast } from "../../types/podcast";
 import { CreatePodcast } from "./components/CreatePodcast";
-const Podcast = ({ notify }: RouteProps) => {
+const PodcastPage = ({ notify }: RouteProps) => {
   const [podcasts, setPodcasts] = React.useState<Podcast[]>([]);
   React.useEffect(() => {
     getAllPodcastService().then((data) => {
@@ -20,6 +20,9 @@ const Podcast = ({ notify }: RouteProps) => {
   }, []);
 
   const handleAddPodcast = async (podcast: Podcast) => {
+
+    console.log("pd",podcast);
+
     const response = await createPodcastService(podcast);
     if (response?.success) {
       setPodcasts([...podcasts, response.podcast]);
@@ -45,4 +48,4 @@ export const config: RouteConfig = {
     icon: SparklesSolid,
   },
 };
-export default Podcast;
+export default PodcastPage;

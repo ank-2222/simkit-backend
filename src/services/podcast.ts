@@ -17,19 +17,20 @@ class PodcastService extends BaseService {
   async create(data: any): Promise<Podcast> {
     return await this.manager.transaction(async (transactionManager) => {
       const podcastRepo = transactionManager.withRepository(this.podcastRepository);
-
+  
       let imageUrl = null;
       let audioUrl = null;
-  
-      if (data?.image) {
-        imageUrl = await uploadFileToSupabase(data.image, `podcast/images/${data.image.name}`);
+      // console.log(data);
+       console.log("data",data.image);
+      if (data.image) {
+        imageUrl = await uploadFileToSupabase(data.image, `podcast/images/${data.image.newFilename}`);
         if (!imageUrl) {
           throw new MedusaError(MedusaError.Types.INVALID_DATA, 'Failed to upload image');
         }
       }
   
-      if (data?.audio) {
-        audioUrl = await uploadFileToSupabase(data.audio, `podcast/audios/${data.audio.name}`);
+      if (data.audio) {
+        audioUrl = await uploadFileToSupabase(data.audio, `podcast/audios/${data.audio.newFilename}`);
         if (!audioUrl) {
           throw new MedusaError(MedusaError.Types.INVALID_DATA, 'Failed to upload audio');
         }
@@ -40,11 +41,12 @@ class PodcastService extends BaseService {
         image_url: imageUrl,
         audio_file: audioUrl,
       };
-
+  
       const podcast = podcastRepo.create(podcastData);
       return await podcastRepo.save(podcast);
     });
   }
+  
 
 
 

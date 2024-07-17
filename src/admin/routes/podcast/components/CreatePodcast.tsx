@@ -1,13 +1,12 @@
-import { Button, FocusModal, Heading, Input, Label,Textarea, Text } from "@medusajs/ui";
+import { Button, FocusModal, Heading, Input, Label, Textarea, Text } from "@medusajs/ui";
 import { PlusMini } from "@medusajs/icons";
 import React from "react";
 
-interface createPodcastProps{
-    handleAddPodcast: (podcast: any) => void
-    
+interface CreatePodcastProps {
+  handleAddPodcast: (podcast:any) => void;
 }
 
-export function CreatePodcast({handleAddPodcast}:createPodcastProps) {
+export function CreatePodcast({ handleAddPodcast }: CreatePodcastProps) {
   const [podcastData, setPodcastData] = React.useState({
     title: "",
     subtitle: "",
@@ -16,8 +15,8 @@ export function CreatePodcast({handleAddPodcast}:createPodcastProps) {
     description: "",
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, files } = e.target;
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value, files } = e.target as HTMLInputElement;
 
     if (files && files.length > 0) {
       // Handle file input
@@ -36,8 +35,18 @@ export function CreatePodcast({handleAddPodcast}:createPodcastProps) {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(podcastData);
-    handleAddPodcast(podcastData);
+    
+    const formData = new FormData();
+    console.log("podcastdata",podcastData);
+    formData.append("title", podcastData.title);
+    formData.append("subtitle", podcastData.subtitle);
+    formData.append("audio", podcastData.audio as File);
+    formData.append("image", podcastData.image as File);
+    formData.append("description", podcastData.description);
+    for (let [key, value] of formData.entries()) {
+      console.log(key, value);
+    }
+    handleAddPodcast(formData);
   };
 
   return (
@@ -61,7 +70,7 @@ export function CreatePodcast({handleAddPodcast}:createPodcastProps) {
                 <div className="flex flex-col gap-2">
                   <Label>Title</Label>
                   <Input
-                  name="title"
+                    name="title"
                     placeholder="Enter title"
                     value={podcastData.title}
                     onChange={handleChange}
@@ -71,7 +80,7 @@ export function CreatePodcast({handleAddPodcast}:createPodcastProps) {
                 <div className="flex flex-col gap-2">
                   <Label>Subtitle</Label>
                   <Input
-                  name="subtitle"
+                    name="subtitle"
                     placeholder="Enter subtitle"
                     value={podcastData.subtitle}
                     onChange={handleChange}
@@ -81,7 +90,7 @@ export function CreatePodcast({handleAddPodcast}:createPodcastProps) {
                 <div className="flex flex-col gap-2">
                   <Label>Audio</Label>
                   <Input
-                  name="audio"
+                    name="audio"
                     placeholder="Upload audio"
                     type="file"
                     onChange={handleChange}
@@ -92,7 +101,7 @@ export function CreatePodcast({handleAddPodcast}:createPodcastProps) {
                 <div>
                   <Label>Image</Label>
                   <Input
-                  name="image"
+                    name="image"
                     placeholder="Upload image"
                     type="file"
                     onChange={handleChange}
@@ -100,12 +109,16 @@ export function CreatePodcast({handleAddPodcast}:createPodcastProps) {
                     accept="image/*"
                   />
                 </div>
+                {/* <img src={podcastData.image.name} alt="podcast image" /> */}
                 <div>
                   <Label>Description</Label>
                   <Textarea
-                  name="description"
+                    name="description"
                     value={podcastData.description}
-                    onChange={(e)=>setPodcastData((prevState) => ({ ...prevState, description: e.target.value }))}
+                    onChange={(e) => setPodcastData((prevState) => ({
+                      ...prevState,
+                      description: e.target.value
+                    }))}
                     className="w-full h-32 p-2"
                     placeholder="Enter description"
                   />

@@ -20,7 +20,7 @@ export const createPodcastService = async (data) => {
   try {
     const options = {
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type":  "multipart/form-data",
       },
       withCredentials: true,
     };
