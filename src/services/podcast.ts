@@ -4,6 +4,7 @@ import PodcastRepository from "../repositories/podcast";
 import { Podcast } from "../models/podcast";
 import { uploadFileToSupabase } from "../utils/uploadFileToSupabase";
 import { MedusaError } from "medusa-core-utils";
+import { deleteFileFromSupabase } from "../utils/DeleteFileFromSupabase";
 class PodcastService extends BaseService {
   private manager: EntityManager;
   private podcastRepository: any;
@@ -48,6 +49,16 @@ class PodcastService extends BaseService {
       const podcastRepo = transactionManager.withRepository(
         this.podcastRepository
       );
+
+      const podcast = await podcastRepo.findOne({ where: { id: podcastId } });
+      if (!podcast) {
+        throw new MedusaError(MedusaError.Types.NOT_FOUND, 'Podcast not found');
+      }
+      const audioPath = podcast.audio_file.split("//")[1];
+      const imagePath = podcast.image_url.split("//")[1];
+
+      deleteFileFromSupabase(audioPath);
+      deleteFileFromSupabase(imagePath);
       await podcastRepo.delete(podcastId);
     });
   }
