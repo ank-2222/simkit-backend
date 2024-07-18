@@ -21,9 +21,9 @@ const PodcastPage = ({ notify }: RouteProps) => {
   }, []);
 
   const[ isCreatingPodcast, setIsCreatingPodcast] = React.useState(false);
-
+  const[isModalOpen, setIsModalOpen] = React.useState(false);
   const handleAddPodcast = async (podcast: Podcast) => {
-
+    
     setIsCreatingPodcast(true);
     const response = await createPodcastService(podcast);
     if (response?.success) {
@@ -33,6 +33,8 @@ const PodcastPage = ({ notify }: RouteProps) => {
     }else{
       notify.error("Podcast", "Failed to add podcast");
     }
+    setIsModalOpen(false);
+
   };
 
 
@@ -49,7 +51,9 @@ const PodcastPage = ({ notify }: RouteProps) => {
   return (
     <div>
       <div className="flex justify-end items-center py-8 px-4 ">
-        <CreatePodcast handleAddPodcast={handleAddPodcast} isCreatingPodcast={isCreatingPodcast}  />
+        <CreatePodcast handleAddPodcast={handleAddPodcast} isCreatingPodcast={isCreatingPodcast} 
+        isOpen={isModalOpen} setIsOpen={setIsModalOpen}
+        />
       </div >
 
       <PodcastListTable podcasts={podcasts} handleDeletePodcast={handleDeletePodcast}  />

@@ -37,6 +37,7 @@ class PodcastService extends BaseService {
       const podcastRepo = transactionManager.withRepository(
         this.podcastRepository
       );
+      console.log("podcastId", podcastId, data);
       await podcastRepo.update(podcastId, data);
       return await podcastRepo.findOne({ where: { id: podcastId } });
     });

@@ -3,7 +3,6 @@ import { useMemo, useState } from "react";
 import { Podcast } from "../../../types/podcast";
 import { EllipsisHorizontal, PencilSquare, Trash } from "@medusajs/icons";
 import { DropdownMenu, IconButton } from "@medusajs/ui";
-import { EditPodcast } from "./EditPodcast";
 import { useNavigate } from "react-router-dom";
 interface podcastProps {
   podcasts: Podcast[];

@@ -14,11 +14,15 @@ import { uploadFileService } from "../../../utils/podcastService";
 interface CreatePodcastProps {
   handleAddPodcast: (podcast: any) => void;
   isCreatingPodcast: boolean;
+  isOpen: boolean;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export function CreatePodcast({
   handleAddPodcast,
   isCreatingPodcast,
+  isOpen,
+  setIsOpen,
 }: CreatePodcastProps) {
   const [podcastData, setPodcastData] = React.useState({
     title: "",
@@ -108,9 +112,13 @@ export function CreatePodcast({
   };
 
   return (
-    <FocusModal >
+    <FocusModal
+    
+    open={isOpen}
+    onOpenChange={(isOpen) => setIsOpen(isOpen)}
+    >
       <FocusModal.Trigger asChild>
-        <Button>
+        <Button onClick={()=>setIsOpen(true)} >
           Add Podcast
           <PlusMini />
         </Button>

@@ -64,7 +64,7 @@ export const editPodcastService = async (id:string,data:any) => {
   try {
     const options = {
       headers: {
-        "Content-Type":  "multipart/form-data",
+        "Content-Type":  "application/json",
       },
       withCredentials: true,
     };
