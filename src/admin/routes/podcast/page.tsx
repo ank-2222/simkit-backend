@@ -5,6 +5,7 @@ import PodcastListTable from "./components/PodcastListTable";
 import React from "react";
 import {
   createPodcastService,
+  deletePodcastService,
   getAllPodcastService,
 } from "../../utils/podcastService";
 import { Podcast } from "../../types/podcast";
@@ -19,12 +20,14 @@ const PodcastPage = ({ notify }: RouteProps) => {
     });
   }, []);
 
+  const[ isCreatingPodcast, setIsCreatingPodcast] = React.useState(false);
+
   const handleAddPodcast = async (podcast: Podcast) => {
 
-    console.log("pd",podcast);
-
+    setIsCreatingPodcast(true);
     const response = await createPodcastService(podcast);
     if (response?.success) {
+      setIsCreatingPodcast(false);
       setPodcasts([...podcasts, response.podcast]);
       notify.success("Podcast", "Podcast Added successfully");
     }else{
@@ -32,13 +35,24 @@ const PodcastPage = ({ notify }: RouteProps) => {
     }
   };
 
+
+  const handleDeletePodcast = async (id: string) => {
+    const response = await deletePodcastService(id);
+    if (response?.success) {
+      setPodcasts(podcasts.filter((podcast) => podcast.id !== id));
+      notify.success("Podcast", "Podcast deleted successfully");
+    } else {
+      notify.error("Podcast", "Failed to delete podcast");
+    }
+  }
+
   return (
     <div>
       <div className="flex justify-end items-center py-8 px-4 ">
-        <CreatePodcast handleAddPodcast={handleAddPodcast} />
-      </div>
+        <CreatePodcast handleAddPodcast={handleAddPodcast} isCreatingPodcast={isCreatingPodcast}  />
+      </div >
 
-      <PodcastListTable podcasts={podcasts} />
+      <PodcastListTable podcasts={podcasts} handleDeletePodcast={handleDeletePodcast}  />
     </div>
   );
 };
