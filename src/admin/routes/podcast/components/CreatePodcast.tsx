@@ -158,7 +158,7 @@ export function CreatePodcast({
                 </div>
                 <div className="w-full flex flex-col items-center">
                   <div className="flex flex-1 flex-col gap-2 w-full">
-                    <Label>Audio</Label>
+                    <Label>Audio (mp3, wav, ogg, aac, m4a, Mp4 format only) </Label>
                     <div className="flex flex-1 w-full  items-center gap-x-4 relative">
 
                     <Input
@@ -167,7 +167,7 @@ export function CreatePodcast({
                       type="file"
                       onChange={(e) => handleUploadFile(e, "audio")}
                       required
-                      accept="audio/*"
+                      accept="audio/mp3, audio/wav, audio/ogg, audio/aac, audio/x-m4a, audio/m4a, audio/mp4"
                       className="w-full h-[40px]"
                     />
                     {isAudioFileUploading && <Spinner className="mr-2 animate-spin absolute right-[-50px] " />}
@@ -179,7 +179,7 @@ export function CreatePodcast({
                     )}
                   </div>
                   <div className="flex flex-1 flex-col gap-2 w-full">
-                    <Label>Image</Label>
+                    <Label>Image (png/jpeg/jpg format only)</Label>
                     <div className="flex flex-1 w-full  items-center gap-x-4 relative">
 
                     <Input
@@ -188,7 +188,7 @@ export function CreatePodcast({
                       type="file"
                       onChange={(e) => handleUploadFile(e, "image")}
                       required
-                      accept="image/*"
+                       accept="image/png, image/jpeg, image/jpg"
                       className="w-full h-[40px]"
 
                     />
