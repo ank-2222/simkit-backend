@@ -36,7 +36,7 @@
     "@medusajs/ui": "^2.0.0",
     "@medusajs/ui-preset": "^1.0.1",
     "@supabase/supabase-js": "^2.44.4",
-    "@tanstack/react-query": "4.22.0",
+    "@tanstack/react-query": "5.51.9",
     "axios": "^1.7.2",
     "base64-arraybuffer": "^1.0.2",
     "body-parser": "^1.19.0",
