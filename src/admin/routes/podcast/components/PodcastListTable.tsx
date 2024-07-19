@@ -1,7 +1,7 @@
 import { Table } from "@medusajs/ui";
 import { useMemo, useState } from "react";
 import { Podcast } from "../../../types/podcast";
-import { EllipsisHorizontal, PencilSquare, Trash } from "@medusajs/icons";
+import { EllipsisHorizontal, PencilSquare, Tools, Trash } from "@medusajs/icons";
 import { DropdownMenu, IconButton } from "@medusajs/ui";
 import { useNavigate } from "react-router-dom";
 interface podcastProps {
@@ -85,8 +85,8 @@ function PodcastListTable({ podcasts, handleDeletePodcast }: podcastProps) {
                         <DropdownMenu.Item className="gap-x-2" onClick={()=>{
                           navigate(`/a/podcast/${podcast.id}`)
                         }} >
-                          <PencilSquare className="text-ui-fg-subtle" />
-                          Edit
+                          < Tools className="text-ui-fg-subtle" />
+                          Details
                         </DropdownMenu.Item>
 
                         <DropdownMenu.Separator />
