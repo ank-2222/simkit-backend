@@ -54,8 +54,8 @@ class PodcastService extends BaseService {
       if (!podcast) {
         throw new MedusaError(MedusaError.Types.NOT_FOUND, 'Podcast not found');
       }
-      const audioPath = podcast.audio_file.split("//")[1];
-      const imagePath = podcast.image_url.split("//")[1];
+      const audioPath = podcast.audio_file.split("//")[2];
+      const imagePath = podcast.image_url.split("//")[2];
 
       deleteFileFromSupabase(audioPath);
       deleteFileFromSupabase(imagePath);
