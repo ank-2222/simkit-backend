@@ -30,6 +30,12 @@ import {
     @Column({ type: 'text', nullable: true })
     subtitle?: string;
   
+    @Column({ type: 'text', nullable: false })
+    author?: string;
+
+    @Column({ type: 'text', nullable: false })
+    article?: string;
+
     @CreateDateColumn({ type: 'timestamptz' })
     created_at: Date;
   

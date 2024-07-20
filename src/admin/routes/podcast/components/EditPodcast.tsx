@@ -1,7 +1,6 @@
 import {
     Button,
     FocusModal,
-    Heading,
     Input,
     Label,
     Textarea,
@@ -11,6 +10,31 @@ import {
   import React from "react";
   import { uploadFileService } from "../../../utils/podcastService";
 import { Podcast } from "../../../types/podcast";
+
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import {
+  ClassicEditor,
+  Bold,
+  Essentials,
+  Heading,
+  Indent,
+  IndentBlock,
+  Italic,
+  Link,
+  List,
+  MediaEmbed,
+  Paragraph,
+  Table,
+  Undo,
+  Autosave,
+  Strikethrough,
+  Subscript,
+  Superscript,
+  Autoformat,
+  CodeBlock,
+  SourceEditing,
+} from "ckeditor5";
+import "ckeditor5/ckeditor5.css";
   
   interface CreatePodcastProps {
     open:boolean;
@@ -30,6 +54,8 @@ import { Podcast } from "../../../types/podcast";
     const [podcastData, setPodcastData] = React.useState({
       title: data.title||"",
       subtitle: data.subtitle||"",
+      author: data.author||"",
+      article: data.article||"",
       audio_file:data.audio_file|| "",
       image_url: data.image_url||"",
       description:data.description|| "",
@@ -39,6 +65,8 @@ import { Podcast } from "../../../types/podcast";
         title: data.title,
         subtitle: data.subtitle,
         audio_file:data.audio_file,
+        author: data.author,
+        article: data.article,
         image_url: data.image_url,
         description:data.description,
       });
@@ -120,7 +148,13 @@ import { Podcast } from "../../../types/podcast";
       handleUpdatePodcast(data.id,podcastData);
     
     };
-  
+    const handleEditorChange = (event, editor) => {
+      const data = editor.getData();
+      setPodcastData((prevState) => ({  
+        ...prevState,
+        article: data,
+        }));
+    };
     return (
       <FocusModal
       open={open}
@@ -136,9 +170,9 @@ import { Podcast } from "../../../types/podcast";
           <FocusModal.Header>
             {/* <button onClick={()=>setOpen(false) } className="bg-red-600 px-2 py-1 mx-4 text-base font-bold  text-white rounded-[0.4rem] " >Close</button> */}
           </FocusModal.Header>
-          <FocusModal.Body className="flex flex-col items-center py-8 min-w-[800px] m-auto">
+          <FocusModal.Body className="flex flex-col items-center py-8 max-w-[800px] m-auto">
             <div className="w-full">
-              <Heading className="font-bold ">Edit Podcast</Heading>
+              <p className="font-bold ">Edit Podcast</p>
               <Text className="mt-4">
                 Fill in the details and Save.
               </Text>
@@ -161,6 +195,16 @@ import { Podcast } from "../../../types/podcast";
                         name="subtitle"
                         placeholder="Enter subtitle"
                         value={podcastData.subtitle}
+                        onChange={handleChange}
+                        className="h-[40px] w-full "
+                      />
+                    </div>
+                    <div className="flex w-full  flex-1 flex-col gap-2">
+                      <Label>Author</Label>
+                      <Input
+                        name="author"
+                        placeholder="Enter Author"
+                        value={podcastData.author}
                         onChange={handleChange}
                         className="h-[40px] w-full "
                       />
@@ -223,6 +267,59 @@ import { Podcast } from "../../../types/podcast";
                       placeholder="Enter description"
                     />
                   </div>
+                  <div className="z-[999] relative min-h-[200px]">
+                  <CKEditor
+                    data={podcastData.article}
+                    editor={ClassicEditor}
+                    onChange={handleEditorChange}
+                    config={{
+                     
+                      toolbar: [
+                        "undo",
+                        "redo",
+                        
+                        "|",
+                        "heading",
+                        "|",
+                        "bold",
+                        "italic",
+                        'strikethrough', 'subscript', 'superscript', 
+                        "|",
+                        "link",
+                        "insertTable",
+                        // "mediaEmbed",
+                        "|",
+                        "bulletedList",
+                        "numberedList",
+                        "indent",
+                        "outdent",
+                      ],
+                    
+                      plugins: [
+                        Autosave,
+                        Bold,
+                        Essentials,
+                        Heading,
+                        Indent,
+                        Autoformat,
+                        IndentBlock,
+                        Italic,
+                        Link,
+                        List,
+                        // MediaEmbed,
+                        Strikethrough,
+                        Subscript,
+                        Superscript,
+                        Paragraph,
+                        Table,
+                        Undo,
+
+                      ],
+                      
+
+                    }}
+                  />
+                </div>
                   <Button type="submit"   >
                     {isEditing ? (
                       <Spinner className="mr-2 animate-spin" />

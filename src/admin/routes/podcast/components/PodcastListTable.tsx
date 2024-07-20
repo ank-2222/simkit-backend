@@ -48,7 +48,7 @@ function PodcastListTable({ podcasts, handleDeletePodcast }: podcastProps) {
             <Table.Row>
               <Table.HeaderCell className="pl-4">#</Table.HeaderCell>
               <Table.HeaderCell>Title</Table.HeaderCell>
-              <Table.HeaderCell>Subtitle</Table.HeaderCell>
+              <Table.HeaderCell>Author</Table.HeaderCell>
               <Table.HeaderCell>Uploaded on</Table.HeaderCell>
               <Table.HeaderCell>Action</Table.HeaderCell>
             </Table.Row>
@@ -69,7 +69,7 @@ function PodcastListTable({ podcasts, handleDeletePodcast }: podcastProps) {
                 >
                   <Table.Cell className="pl-4">{index + 1}</Table.Cell>
                   <Table.Cell>{podcast.title}</Table.Cell>
-                  <Table.Cell>{podcast.subtitle}</Table.Cell>
+                  <Table.Cell>{podcast.author}</Table.Cell>
                   <Table.Cell>
                     {new Date(podcast.created_at).toLocaleString()}
                   </Table.Cell>

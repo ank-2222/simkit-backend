@@ -14,6 +14,8 @@ const PodcastPage = ({ notify }: any) => {
     id: "",
     title: "",
     description: "",
+    author: "",
+    article: "",
     image_url: "",
     audio_file: "",
     subtitle: "",
@@ -77,6 +79,10 @@ const PodcastPage = ({ notify }: any) => {
                 <p>{podcastData.subtitle}</p>
               </div>
               <div>
+                <h3 className="text-[1.2rem] font-semibold mt-4 ">Author</h3>
+                <p>{podcastData.author}</p>
+              </div>
+              <div>
                 <h3 className="text-[1.2rem] font-semibold mt-4 ">
                   Description
                 </h3>
@@ -97,6 +103,11 @@ const PodcastPage = ({ notify }: any) => {
                   alt="podcast image"
                   className="w-[200px] h-[200px] object-cover"
                 />
+              </div>
+
+              <div>
+                <h3 className="text-[1.2rem] font-semibold my-4 ">Article</h3>
+                <div dangerouslySetInnerHTML={{ __html: podcastData?.article }} />
               </div>
             </section>
           </div>

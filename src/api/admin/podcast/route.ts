@@ -63,9 +63,7 @@ export async function PUT(
     const updatePodcast: podcastService = await req.scope.resolve(
       "podcastService"
     );
-    console.log("first",id);
     const podcast = await updatePodcast.update(id, data);
-    console.log("second",podcast);
     res.status(200).json({
       success: true,
       podcast,

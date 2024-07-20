@@ -1,15 +1,31 @@
-import {
-  Button,
-  FocusModal,
-  Heading,
-  Input,
-  Label,
-  Textarea,
-  Text,
-} from "@medusajs/ui";
+import { Button, FocusModal, Input, Label, Textarea, Text } from "@medusajs/ui";
 import { PlusMini, Spinner } from "@medusajs/icons";
 import React from "react";
 import { uploadFileService } from "../../../utils/podcastService";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import {
+  ClassicEditor,
+  Bold,
+  Essentials,
+  Heading,
+  Indent,
+  IndentBlock,
+  Italic,
+  Link,
+  List,
+  MediaEmbed,
+  Paragraph,
+  Table,
+  Undo,
+  Autosave,
+  Strikethrough,
+  Subscript,
+  Superscript,
+  Autoformat,
+  CodeBlock,
+  SourceEditing,
+} from "ckeditor5";
+import "ckeditor5/ckeditor5.css";
 
 interface CreatePodcastProps {
   handleAddPodcast: (podcast: any) => void;
@@ -27,15 +43,18 @@ export function CreatePodcast({
   const [podcastData, setPodcastData] = React.useState({
     title: "",
     subtitle: "",
+    author: "",
+    article: `<h1>Start Editing...</h1>`,
     audio_file: "",
     image_url: "",
     description: "",
   });
- console.log("podcastData",podcastData)
+  console.log("podcastData", podcastData);
   const [audioFile, setAudioFile] = React.useState<File | null>(null);
   const [imageFile, setImageFile] = React.useState<File | null>(null);
   const [isAudioFileUploading, setIsAudioFileUploading] = React.useState(false);
   const [isImageFileUploading, setIsImageFileUploading] = React.useState(false);
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -56,6 +75,17 @@ export function CreatePodcast({
     }
   };
 
+  const article_data = localStorage.getItem("article_data");
+  React.useEffect(() => {
+    if (article_data !== "" && article_data !== null) {
+      console.log("article_data from local");
+      setPodcastData((prevState) => ({
+        ...prevState,
+        article: article_data,
+      }));
+    }
+  }, []);
+
   const handleUploadFile = async (
     e: React.ChangeEvent<HTMLInputElement>,
     type: String
@@ -71,7 +101,7 @@ export function CreatePodcast({
         });
         setPodcastData((prevState) => ({
           ...prevState,
-          audio_file: response.fileUrl,
+          audio_file: response?.fileUrl,
         }));
         setIsAudioFileUploading(false);
       } else if (files && files[0] && type === "image") {
@@ -83,7 +113,7 @@ export function CreatePodcast({
         });
         setPodcastData((prevState) => ({
           ...prevState,
-          image_url: response.fileUrl,
+          image_url: response?.fileUrl,
         }));
         setIsImageFileUploading(false);
       }
@@ -97,37 +127,51 @@ export function CreatePodcast({
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if(!podcastData.audio_file || !podcastData.image_url||!podcastData.title||!podcastData.description){
+    if (
+      !podcastData.audio_file ||
+      !podcastData.image_url ||
+      !podcastData.title ||
+      !podcastData.description ||
+      !podcastData.author ||
+      !podcastData.article
+    ) {
       alert("Please fill all the required fields");
       return;
     }
     handleAddPodcast(podcastData);
+    localStorage.removeItem("article_data");
     setPodcastData({
       title: "",
       subtitle: "",
+      author: "",
+      article: ``,
       audio_file: "",
       image_url: "",
       description: "",
     });
   };
+  const handleEditorChange = (event, editor) => {
+    const data = editor.getData();
+    setPodcastData((prevState) => ({  
+      ...prevState,
+      article: data,
+      }));
+    localStorage.setItem('article_data', data);
+  };
 
   return (
-    <FocusModal
-    
-    open={isOpen}
-    onOpenChange={(isOpen) => setIsOpen(isOpen)}
-    >
+    <FocusModal open={isOpen} onOpenChange={(isOpen) => setIsOpen(isOpen)}>
       <FocusModal.Trigger asChild>
-        <Button onClick={()=>setIsOpen(true)} >
+        <Button onClick={() => setIsOpen(true)}>
           Add Podcast
           <PlusMini />
         </Button>
       </FocusModal.Trigger>
       <FocusModal.Content className="w-full max-h-[100vh] border-2 overflow-y-scroll">
         <FocusModal.Header></FocusModal.Header>
-        <FocusModal.Body className="flex flex-col items-center py-8 min-w-[800px] m-auto">
+        <FocusModal.Body className="flex flex-col items-center py-8 max-w-[800px] m-auto">
           <div className="w-full">
-            <Heading className="font-bold ">Create Podcast</Heading>
+            <p className="font-bold ">Create Podcast</p>
             <Text className="mt-4">
               Fill in the details to create a podcast
             </Text>
@@ -155,22 +199,35 @@ export function CreatePodcast({
                       className="h-[40px] w-full "
                     />
                   </div>
+                  <div className="flex w-full  flex-1 flex-col gap-2">
+                    <Label>Author</Label>
+                    <Input
+                      name="author"
+                      placeholder="Enter Author Name"
+                      value={podcastData.author}
+                      onChange={handleChange}
+                      className="h-[40px] w-full "
+                    />
+                  </div>
                 </div>
                 <div className="w-full flex flex-col items-center">
                   <div className="flex flex-1 flex-col gap-2 w-full">
-                    <Label>Audio (mp3, wav, ogg, aac, m4a, Mp4 format only) </Label>
+                    <Label>
+                      Audio (mp3, wav, ogg, aac, m4a, Mp4 format only){" "}
+                    </Label>
                     <div className="flex flex-1 w-full  items-center gap-x-4 relative">
-
-                    <Input
-                      name="audio"
-                      placeholder="Upload audio"
-                      type="file"
-                      onChange={(e) => handleUploadFile(e, "audio")}
-                      required
-                      accept="audio/mp3, audio/wav, audio/ogg, audio/aac, audio/x-m4a, audio/m4a, audio/mp4"
-                      className="w-full h-[40px]"
-                    />
-                    {isAudioFileUploading && <Spinner className="mr-2 animate-spin absolute right-[-50px] " />}
+                      <Input
+                        name="audio"
+                        placeholder="Upload audio"
+                        type="file"
+                        onChange={(e) => handleUploadFile(e, "audio")}
+                        required
+                        accept="audio/mp3, audio/wav, audio/ogg, audio/aac, audio/x-m4a, audio/m4a, audio/mp4"
+                        className="w-full h-[40px]"
+                      />
+                      {isAudioFileUploading && (
+                        <Spinner className="mr-2 animate-spin absolute right-[-50px] " />
+                      )}
                     </div>
                     {podcastData.audio_file && !isAudioFileUploading && (
                       <audio controls>
@@ -181,21 +238,24 @@ export function CreatePodcast({
                   <div className="flex flex-1 flex-col gap-2 w-full">
                     <Label>Image (png/jpeg/jpg format only)</Label>
                     <div className="flex flex-1 w-full  items-center gap-x-4 relative">
-
-                    <Input
-                      name="image"
-                      placeholder="Upload image"
-                      type="file"
-                      onChange={(e) => handleUploadFile(e, "image")}
-                      required
-                       accept="image/png, image/jpeg, image/jpg"
-                      className="w-full h-[40px]"
-
-                    />
-                    {isImageFileUploading && <Spinner className="mr-2 animate-spin absolute right-[-50px]  " />}
+                      <Input
+                        name="image"
+                        placeholder="Upload image"
+                        type="file"
+                        onChange={(e) => handleUploadFile(e, "image")}
+                        required
+                        accept="image/png, image/jpeg, image/jpg"
+                        className="w-full h-[40px]"
+                      />
+                      {isImageFileUploading && (
+                        <Spinner className="mr-2 animate-spin absolute right-[-50px]  " />
+                      )}
                     </div>
-                    {podcastData.image_url&& !isImageFileUploading && (
-                      <img className="object-cover border-4 rounded-[0.3rem] w-[400px] h-[400px] object-center " src={podcastData.image_url} />
+                    {podcastData.image_url && !isImageFileUploading && (
+                      <img
+                        className="object-cover border-4 rounded-[0.3rem] w-[400px] h-[400px] object-center "
+                        src={podcastData.image_url}
+                      />
                     )}
                   </div>
                 </div>
@@ -216,6 +276,71 @@ export function CreatePodcast({
                     required
                   />
                 </div>
+
+                <div className="z-[999] relative min-h-[200px]">
+                  <CKEditor
+                    data={podcastData.article}
+                    editor={ClassicEditor}
+                    onChange={handleEditorChange}
+                    config={{
+                     
+                      toolbar: [
+                        "undo",
+                        "redo",
+                        
+                        "|",
+                        "heading",
+                        "|",
+                        "bold",
+                        "italic",
+                        'strikethrough', 'subscript', 'superscript', 
+                        "|",
+                        "link",
+                        "insertTable",
+                        // "mediaEmbed",
+                        "|",
+                        "bulletedList",
+                        "numberedList",
+                        "indent",
+                        "outdent",
+                      ],
+                    
+                      plugins: [
+                        Autosave,
+                        Bold,
+                        Essentials,
+                        Heading,
+                        Indent,
+                        Autoformat,
+                        IndentBlock,
+                        Italic,
+                        Link,
+                        List,
+                        // MediaEmbed,
+                        Strikethrough,
+                        Subscript,
+                        Superscript,
+                        Paragraph,
+                        Table,
+                        Undo,
+
+                      ],
+                      autosave: {
+                        save(editor) {
+                          return new Promise((resolve, reject) => {
+                            setTimeout(() => {
+                              const data = editor.getData();
+                              localStorage.setItem("article_data", data);
+                            }, 2000);
+                          });
+                        },
+                      },
+
+                      // initialData: podcastData?.article,
+                    }}
+                  />
+                </div>
+
                 <Button type="submit" disabled={isCreatingPodcast}>
                   {isCreatingPodcast ? (
                     <Spinner className="mr-2" />
