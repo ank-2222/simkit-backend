@@ -114,7 +114,7 @@ import "ckeditor5/ckeditor5.css";
           });
           setPodcastData((prevState) => ({
             ...prevState,
-            audio_file: response.fileUrl,
+            audio_file: response?.fileUrl,
           }));
           setIsAudioFileUploading(false);
         } else if (files && files[0] && type === "image") {
@@ -126,7 +126,7 @@ import "ckeditor5/ckeditor5.css";
           });
           setPodcastData((prevState) => ({
             ...prevState,
-            image_url: response.fileUrl,
+            image_url: response?.fileUrl,
           }));
           setIsImageFileUploading(false);
         }
