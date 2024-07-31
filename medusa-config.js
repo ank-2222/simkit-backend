@@ -91,6 +91,7 @@ const plugins = [
     options: {
       api_key: process.env.SHIPSTATION_API_KEY,
       api_secret: process.env.SHIPSTATION_SECRET_KEY,
+      
       weight_units: 'ounces', // optional property, valid values are 'ounces', 'pounds', or 'grams'.
       dimension_units: 'inches' // optional property, valid values are 'centimeters' or 'inches'.
     }
