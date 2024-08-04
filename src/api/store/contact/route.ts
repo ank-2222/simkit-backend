@@ -7,6 +7,7 @@ export async function POST(
   res: MedusaResponse
 ): Promise<void> {
   try {
+    console.log("POST /contact");
     const contactService: ContactService = await req.scope.resolve(
       "contactService"
     );
