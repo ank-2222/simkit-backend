@@ -95,16 +95,74 @@ const plugins = [
       weight_units: 'ounces', // optional property, valid values are 'ounces', 'pounds', or 'grams'.
       dimension_units: 'inches' // optional property, valid values are 'centimeters' or 'inches'.
     }
-  }
+  },
+  {
+    resolve: `@rsc-labs/medusa-store-analytics`,
+    options: {
+      enableUI: true
+    }
+  },
+  {
+    resolve: `@rsc-labs/medusa-affiliate-discount`,
+    options: {
+      enableUI: true,
+      updateWhen: 'PAYMENT_CAPTURED'
+    }
+  },
+  {
+    resolve: `medusa-plugin-abandoned-cart`,
+    /** @type {import('medusa-plugin-abandoned-cart').PluginOptions} */
+    options: {
+      sendgridEnabled: true,
+      from: process.env.SENDGRID_FROM,
+      enableUI: true,
+      subject: "You have something in your cart",
+      templateId: process.env.SENDGRID_ABANDONED_CART_TEMPLATE,
+      days_to_track: 7,
+      set_as_completed_if_overdue: true,
+      max_overdue: "2h",
+    
+      intervals: [
+        {
+          interval: 10000,
+          subject: "You have something in your cart",
+          templateId: process.env.SENDGRID_ABANDONED_CART_TEMPLATE,
+          
+        },
+        {
+          interval: "1d",
+          subject: "You have something in your cart",
+          templateId: process.env.SENDGRID_ABANDONED_CART_TEMPLATE,
+         
+        },
+        {
+          interval: "5d",
+          subject: "You have something in your cart",
+          templateId: process.env.SENDGRID_ABANDONED_CART_TEMPLATE,
+         
+        },
+      ],
+    },
+  },
+  {
+    resolve: `medusa-plugin-sendgrid`,
+    options: {
+      api_key: process.env.SENDGRID_API_KEY,
+      from: process.env.SENDGRID_FROM,
+      order_placed_template:process.env.SENDGRID_ORDER_PLACED_ID,
+     
+    },
+  },
+
 ];
 
 const modules = {
-  // eventBus: {
-  //   resolve: "@medusajs/event-bus-redis",
-  //   options: {
-  //     redisUrl: REDIS_URL
-  //   }
-  // },
+  eventBus: {
+    resolve: "@medusajs/event-bus-redis",
+    options: {
+      redisUrl: REDIS_URL
+    }
+  },
   // cacheService: {
   //   resolve: "@medusajs/cache-redis",
   //   options: {
