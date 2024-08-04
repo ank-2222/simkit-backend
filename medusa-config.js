@@ -122,26 +122,20 @@ const plugins = [
       set_as_completed_if_overdue: true,
       max_overdue: "2h",
     
-      intervals: [
-        {
-          interval: 10000,
-          subject: "You have something in your cart",
-          templateId: process.env.SENDGRID_ABANDONED_CART_TEMPLATE,
-          
-        },
-        {
-          interval: "1d",
-          subject: "You have something in your cart",
-          templateId: process.env.SENDGRID_ABANDONED_CART_TEMPLATE,
+      // intervals: [
+      //   {
+      //     interval: "1d",
+      //     subject: "You have something in your cart",
+      //     templateId: process.env.SENDGRID_ABANDONED_CART_TEMPLATE,
          
-        },
-        {
-          interval: "5d",
-          subject: "You have something in your cart",
-          templateId: process.env.SENDGRID_ABANDONED_CART_TEMPLATE,
+      //   },
+      //   {
+      //     interval: "5d",
+      //     subject: "You have something in your cart",
+      //     templateId: process.env.SENDGRID_ABANDONED_CART_TEMPLATE,
          
-        },
-      ],
+      //   },
+      // ],
     },
   },
   {
