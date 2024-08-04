@@ -11,7 +11,7 @@ export async function GET(
     );
     const { limit = 10, offset = 0 } = req.query;
 
-    const [contacts, count] = await contactService.listContacts(
+    const [contacts, count] = await contactService.list(
       parseInt(limit as string),
       parseInt(offset as string)
     );

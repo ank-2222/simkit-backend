@@ -16,7 +16,7 @@ export async function POST(
       id,
       ...(req.body as object),
     };
-    const contact = await contactService.createContact(data);
+    const contact = await contactService.create(data);
     res.status(201).json({ success: true, contact });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
