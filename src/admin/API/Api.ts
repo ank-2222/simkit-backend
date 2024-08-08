@@ -8,3 +8,4 @@ export const createPodcast = `${API_VAR}/admin/podcast`;
 export const updatePodcast =(id:string)=> `${API_VAR}/admin/podcast?id=${id}`;
 export const deletePodcast =(id:string)=> `${API_VAR}/admin/podcast?id=${id}`;
 export const uploadFile = `${API_VAR}/admin/podcast/uploadfile`;
+export const getAllContactApi = `${API_VAR}/admin/contact`;
