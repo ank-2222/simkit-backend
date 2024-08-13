@@ -1,44 +1,53 @@
 import { Table } from "@medusajs/ui";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { Tooltip } from "@medusajs/ui";
-
 import { useNavigate } from "react-router-dom";
 import { Contact } from "../../../types/contact";
 import { InformationCircle } from "@medusajs/icons";
+
 interface contactProps {
   Contacts: Contact[];
   contactType: string;
+  nextBatch: (limit: number,offset: number,type:string) => Promise<Contact[]>;
 }
 
-function ContactListTable({ Contacts, contactType }: contactProps) {
-  const data = useMemo(() => Contacts, [Contacts]);
-  const [currentPage, setCurrentPage] = useState(0);
+function ContactListTable({ Contacts, contactType, nextBatch }: contactProps) {
+  const [data, setData] = useState<Contact[]>(Contacts);
+  const [offset, setOffset] = useState(0);
   const pageSize = 10;
-  const pageCount = Math.ceil(data.length / pageSize);
+
+ 
+
   const canNextPage = useMemo(
-    () => currentPage < pageCount - 1,
-    [currentPage, pageCount]
+    () => data.length === pageSize,
+    [data.length, pageSize]
   );
-  const canPreviousPage = useMemo(() => currentPage - 1 >= 0, [currentPage]);
+  const canPreviousPage = useMemo(() => offset > 0, [offset]);
+
+  const fetchNextPage = async (newOffset: number, limit: number) => {
+    const newContacts = await nextBatch(limit,newOffset,contactType);
+    setData(newContacts);
+  };
 
   const nextPage = () => {
     if (canNextPage) {
-      setCurrentPage(currentPage + 1);
+      const newOffset = offset + pageSize;
+      setOffset(newOffset);
+      fetchNextPage(newOffset, pageSize);
     }
   };
 
   const previousPage = () => {
     if (canPreviousPage) {
-      setCurrentPage(currentPage - 1);
+      const newOffset = Math.max(0, offset - pageSize);
+      setOffset(newOffset);
+      fetchNextPage(newOffset, pageSize);
     }
   };
 
   const currentOrders = useMemo(() => {
-    const offset = currentPage * pageSize;
-    const limit = Math.min(offset + pageSize, data.length);
-
-    return data.slice(offset, limit);
-  }, [currentPage, pageSize, data]);
+    return data;
+  }, [data]);
 
   const navigate = useNavigate();
   return (
@@ -49,17 +58,9 @@ function ContactListTable({ Contacts, contactType }: contactProps) {
             <Table.Row>
               <Table.HeaderCell className="pl-4">#</Table.HeaderCell>
               <Table.HeaderCell>Name</Table.HeaderCell>
-              {
-                contactType === "contact" && (
-                  <Table.HeaderCell>Phone</Table.HeaderCell>
-                )
-              }
+              {contactType === "contact" && <Table.HeaderCell>Phone</Table.HeaderCell>}
               <Table.HeaderCell>Email</Table.HeaderCell>
-              {
-                contactType === "contact" && (
-                  <Table.HeaderCell>Message</Table.HeaderCell>
-                )
-              }
+              {contactType === "contact" && <Table.HeaderCell>Message</Table.HeaderCell>}
             </Table.Row>
           </Table.Header>
           <Table.Body className="w-full">
@@ -70,35 +71,33 @@ function ContactListTable({ Contacts, contactType }: contactProps) {
                 </Table.Cell>
               </Table.Row>
             )}
-            {currentOrders.map((contact, index) => {
-              return (
-                <Table.Row
-                  key={contact.id}
-                  className="[&_td:last-child]:w-[1%] [&_td:last-child]:whitespace-nowrap "
-                >
-                  <Table.Cell className="pl-4">{index + 1}</Table.Cell>
-                  <Table.Cell>{contact.name}</Table.Cell>
-                  {contactType === "contact" && (
-                    <Table.Cell>{contact.phone}</Table.Cell>
-                  )}
-                  <Table.Cell>{contact.email}</Table.Cell>
-                  {contactType === "contact" && (
-                    <Table.Cell>
-                      <Tooltip content={contact.message}>
-                        <InformationCircle />
-                      </Tooltip>
-                    </Table.Cell>
-                  )}
-                </Table.Row>
-              );
-            })}
+            {currentOrders.map((contact, index) => (
+         <Table.Row
+         key={contact.id}
+         className="[&_td:last-child]:w-[1%] [&_td:last-child]:whitespace-nowrap"
+         onClick={() => navigate(`/a/contact/${contact.id}`)}
+       >
+       
+                <Table.Cell className="pl-4">{offset + index + 1}</Table.Cell>
+                <Table.Cell>{contact.name}</Table.Cell>
+                {contactType === "contact" && <Table.Cell>{contact.phone}</Table.Cell>}
+                <Table.Cell>{contact.email}</Table.Cell>
+                {contactType === "contact" && (
+                  <Table.Cell>
+                    <Tooltip content={contact.message}>
+                      <InformationCircle />
+                    </Tooltip>
+                  </Table.Cell>
+                )}
+              </Table.Row>
+            ))}
           </Table.Body>
         </Table>
         <Table.Pagination
           count={data.length}
           pageSize={pageSize}
-          pageIndex={currentPage}
-          pageCount={data.length}
+          pageIndex={offset / pageSize}
+          pageCount={Math.ceil(data.length / pageSize)}
           canPreviousPage={canPreviousPage}
           canNextPage={canNextPage}
           previousPage={previousPage}

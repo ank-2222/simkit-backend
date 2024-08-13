@@ -9,11 +9,12 @@ export async function GET(
     const contactService: ContactService = await req.scope.resolve(
       "contactService"
     );
-    const { limit = 10, offset = 0 } = req.query;
+    const { limit = 10, offset = 0,type } = req.query;
 
     const [contacts, count] = await contactService.list(
       parseInt(limit as string),
-      parseInt(offset as string)
+      parseInt(offset as string),
+      type as string
     );
 
     res.status(200).json({ success: true, contacts, count, limit: parseInt(limit as string), offset: parseInt(offset as string) });

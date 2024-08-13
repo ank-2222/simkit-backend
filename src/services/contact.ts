@@ -24,10 +24,11 @@ class ContactService extends BaseService {
     });
   }
 
-  async list(limit: number, offset: number): Promise<[Contact[], number]> {
+  async list(limit: number, offset: number, type:string): Promise<[Contact[], number]> {
     return await this.contactRepository.findAndCount({
       skip: offset,
       take: limit,
+      where: { type }
     });
   }
 
