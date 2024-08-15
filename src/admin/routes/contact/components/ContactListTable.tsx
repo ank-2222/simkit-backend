@@ -75,7 +75,9 @@ function ContactListTable({ Contacts, contactType, nextBatch }: contactProps) {
          <Table.Row
          key={contact.id}
          className="[&_td:last-child]:w-[1%] [&_td:last-child]:whitespace-nowrap"
-         onClick={() => navigate(`/a/contact/${contact.id}`)}
+        //  onClick={()=>{
+        //   navigate(`/a/contact/${contact.id}`)
+        // }}
        >
        
                 <Table.Cell className="pl-4">{offset + index + 1}</Table.Cell>
