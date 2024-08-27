@@ -35,7 +35,7 @@
     "@medusajs/file-local": "latest",
     "@medusajs/icons": "^1.2.1",
     "@medusajs/medusa": "^1.20.6",
-    "@medusajs/ui": "^2.0.0",
+    "@medusajs/ui": "^3.0.1",
     "@medusajs/ui-preset": "^1.0.1",
     "@rsc-labs/medusa-affiliate-discount": "^0.2.0",
     "@rsc-labs/medusa-store-analytics": "^0.14.0",
