@@ -25,7 +25,7 @@
     "dev": "cross-env npm run build:server && medusa develop"
   },
   "dependencies": {
-    "@ckeditor/ckeditor5-react": "^8.0.0",
+    "@ckeditor/ckeditor5-react": "^9.1.0",
     "@lambdacurry/medusa-fulfillment-shipstation": "^0.0.35",
     "@medusajs/admin": "^7.1.14",
     "@medusajs/cache-inmemory": "latest",
